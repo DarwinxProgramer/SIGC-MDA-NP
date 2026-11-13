@@ -1,0 +1,34 @@
+[comment encoding = UTF-8 /]
+[module generate('http://sigc/ecore')/]
+
+[query public mapType(eType : EClassifier) : String =
+    if (eType.name = 'EString') then 'String'
+    else if (eType.name = 'EInt') then 'int'
+    else if (eType.name = 'EDate') then 'java.util.Date'
+    else if (eType.name = 'EBoolean') then 'boolean'
+    else if (eType.name = 'EDouble') then 'double'
+    else eType.name
+    endif endif endif endif endif
+/]
+
+[template public generateElement(ePackage : EPackage)]
+    [comment Genera un archivo por cada clase /]
+    [for (eClass : EClass | ePackage.eClassifiers->select(c | c.oclIsKindOf(EClass)))]
+        [eClass.generateClass() /]
+    [/for]
+[/template]
+
+[template public generateClass(eClass : EClass)]
+[file (eClass.name.concat('.java'), false, 'UTF-8')]
+public class [eClass.name/] {
+
+    [for (attr : EAttribute | eClass.eStructuralFeatures->select(e | e.oclIsKindOf(EAttribute)))]
+    private [attr.eType.mapType() /] [attr.name/];
+    [/for]
+
+    // Constructor vacío
+    public [eClass.name/]() {
+    }
+}
+[/file]
+[/template]

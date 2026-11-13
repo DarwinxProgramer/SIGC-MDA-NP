@@ -1,0 +1,107 @@
+import 'sigc.ecore'
+
+package sigc
+
+-- ============================================================================
+-- CONTEXTO: Paciente
+-- ============================================================================
+context Paciente
+
+-- RN-01: Cada paciente deberá tener un identificador único.
+inv RN01_IdentificadorUnico:
+    not self.identificacion.oclIsUndefined() and
+    self.identificacion.size() > 0 and
+    Paciente.allInstances()->isUnique(p | p.identificacion)
+
+-- RN-02 / Decisión 1: Un paciente tendrá exactamente un HistorialClinico.
+inv RN02_UnHistorialPorPaciente:
+    self.historial->size() = 1
+
+-- ============================================================================
+-- CONTEXTO: Cita
+-- ============================================================================
+context Cita
+
+-- RN-03: Una cita deberá estar asociada a un paciente y a un médico.
+inv RN03_CitaConPacienteYMedico:
+    not self.paciente.oclIsUndefined() and
+    not self.medico.oclIsUndefined()
+
+-- RN-04: Un médico no podrá tener dos citas activas (no canceladas) que se superpongan.
+inv RN04_NoSolapamientoMedico:
+    not self.medico.oclIsUndefined() implies
+    self.medico.citas->select(c |
+        c <> self and
+        c.activo = true and
+        c.estado <> EstadoCita::CANCELADA and
+        self.activo = true and
+        self.estado <> EstadoCita::CANCELADA
+    )->forAll(c |
+        self.fechaHoraFin <= c.fechaHoraInicio or
+        self.fechaHoraInicio >= c.fechaHoraFin
+    )
+
+-- RN-05: Un paciente no podrá tener dos citas activas (no canceladas) que se superpongan.
+inv RN05_NoSolapamientoPaciente:
+    not self.paciente.oclIsUndefined() implies
+    self.paciente.citas->select(c |
+        c <> self and
+        c.activo = true and
+        c.estado <> EstadoCita::CANCELADA and
+        self.activo = true and
+        self.estado <> EstadoCita::CANCELADA
+    )->forAll(c |
+        self.fechaHoraFin <= c.fechaHoraInicio or
+        self.fechaHoraInicio >= c.fechaHoraFin
+    )
+
+-- RN-06: La cita deberá corresponder a una especialidad que el médico esté autorizado a atender.
+inv RN06_EspecialidadAutorizadaMedico:
+    not self.medico.oclIsUndefined() and not self.especialidad.oclIsUndefined() implies
+    self.medico.especialidades->includes(self.especialidad)
+
+-- RN-12: Una cita cancelada no puede tener una consulta médica atendida asociada.
+inv RN12_CitaCanceladaNoAtendida:
+    self.estado = EstadoCita::CANCELADA implies self.consulta.oclIsUndefined()
+
+-- ============================================================================
+-- CONTEXTO: Consulta, Diagnostico y Prescripcion
+-- ============================================================================
+context Consulta
+
+-- RN-07: Una consulta deberá estar asociada a un paciente y a un médico responsable.
+inv RN07_ConsultaConPacienteYMedico:
+    not self.paciente.oclIsUndefined() and
+    not self.medico.oclIsUndefined()
+
+context Diagnostico
+
+-- RN-08: Un diagnóstico deberá estar asociado a una consulta.
+inv RN08_DiagnosticoAsociadoAConsulta:
+    not self.consulta.oclIsUndefined()
+
+context Prescripcion
+
+-- RN-09: Una prescripción deberá ser emitida por un médico autorizado (activo).
+inv RN09_PrescripcionPorMedicoAutorizado:
+    not self.medico.oclIsUndefined() and
+    self.medico.activo = true
+
+-- ============================================================================
+-- CONTEXTO: Inventario (MovimientoInventario y ProductoInventario)
+-- ============================================================================
+context MovimientoInventario
+
+-- RN-10: El inventario no podrá registrar salidas superiores a las existencias disponibles.
+inv RN10_SalidaNoExcedeStockActual:
+    self.cantidad > 0 and
+    (self.tipo = TipoMovimiento::SALIDA and not self.producto.oclIsUndefined() implies
+        self.cantidad <= self.producto.stockActual)
+
+context ProductoInventario
+
+-- RN-10 (Invariante de consistencia de stock): Las existencias nunca pueden ser negativas.
+inv RN10_StockNoNegativo:
+    self.stockActual >= 0 and self.stockMinimo >= 0
+
+endpackage

@@ -1,0 +1,128 @@
+@startuml
+title Diagrama de Casos de Uso General - Sistema Integral de Gestión Clínica (SIGC)
+left to right direction
+
+skinparam defaultFontName "Segoe UI", Arial, sans-serif
+skinparam defaultFontSize 11
+skinparam packageStyle rectangle
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam actorStyle awesome
+
+skinparam package {
+    BackgroundColor #F8FAFC
+    BorderColor #94A3B8
+    FontColor #1E293B
+}
+
+skinparam usecase {
+    BackgroundColor #FFFFFF
+    BorderColor #334155
+    FontColor #0F172A
+    ArrowColor #475569
+}
+
+skinparam note {
+    BackgroundColor #FEF9C3
+    BorderColor #CA8A04
+    FontColor #713F12
+}
+
+actor "Administrador" as Admin #DBEAFE
+actor "Recepcionista" as Recep #DCFCE7
+actor "Médico" as Medico #FEE2E2
+
+rectangle "Sistema Integral de Gestión Clínica (SIGC)" {
+
+    package "Módulo 7: Seguridad y Auditoría" {
+        usecase "UC-21: Autenticar Usuario\n(RF-21)" as UC_Auth #E2E8F0
+        usecase "UC-19: Administrar Usuarios y Roles\n(RF-19, RF-24)" as UC_Users
+        usecase "UC-20: Registrar Operación en Auditoría\n(RF-20)" as UC_AuditLog #F1F5F9
+        usecase "UC-22: Consultar Registros de Auditoría\n(RF-22)" as UC_AuditQuery
+    }
+
+    package "Módulo 1: Gestión de Pacientes" {
+        usecase "UC-01: Registrar Paciente\n(RF-01)" as UC_RegPac
+        usecase "UC-02: Consultar y Actualizar Paciente\n(RF-02, RF-24)" as UC_UpdPac
+    }
+
+    package "Módulo 2: Gestión de Personal Médico" {
+        usecase "UC-03: Administrar Médicos y Especialidades\n(RF-03, RF-24)" as UC_MedEsp
+        usecase "UC-04: Gestionar Horarios de Atención\n(RF-04)" as UC_Horarios
+    }
+
+    package "Módulo 3: Gestión de Citas" {
+        usecase "UC-05: Agendar Cita Médica\n(RF-05)" as UC_Agendar
+        usecase "UC-06: Consultar Disponibilidad y Agenda\n(RF-06, RF-27)" as UC_Disponib
+        usecase "UC-07: Reprogramar, Cancelar o Marcar Estado\n(RF-07, RF-26)" as UC_GestCita
+    }
+
+    package "Módulo 4: Historial Clínico y Consultas" {
+        usecase "UC-08: Consultar Historial Clínico\n(RF-08, RF-14)" as UC_VerHist
+        usecase "UC-09: Registrar Alergias y Antecedentes\n(RF-09)" as UC_Alergias
+        usecase "UC-10: Registrar Consulta y Diagnóstico\n(RF-10, RF-11)" as UC_Consulta
+        usecase "UC-12: Registrar Tratamiento y Prescripción\n(RF-12, RF-13)" as UC_Presc
+        usecase "UC-23: Registrar Enmienda Clínica\n(RF-23)" as UC_Enmienda
+    }
+
+    package "Módulo 5: Inventario" {
+        usecase "UC-15: Administrar Catálogo de Productos\n(RF-15, RF-24, RF-25)" as UC_CatInv
+        usecase "UC-16: Registrar Entradas y Salidas de Stock\n(RF-16)" as UC_MovInv
+        usecase "UC-17: Consultar Alertas de Stock y Vencimiento\n(RF-17)" as UC_AlertInv
+    }
+
+    package "Módulo 6: Reportes" {
+        usecase "UC-18: Generar Reportes Administrativos\ny Estadísticos (RF-18)" as UC_Reportes
+    }
+}
+
+' Relaciones de Administrador (Sin acceso a datos clínicos según Decisión 10)
+Admin --> UC_Users
+Admin --> UC_AuditQuery
+Admin --> UC_MedEsp
+Admin --> UC_Horarios
+Admin --> UC_CatInv
+Admin --> UC_MovInv
+Admin --> UC_AlertInv
+Admin --> UC_Reportes
+
+' Relaciones de Recepcionista
+Recep --> UC_RegPac
+Recep --> UC_UpdPac
+Recep --> UC_Agendar
+Recep --> UC_Disponib
+Recep --> UC_GestCita
+Recep --> UC_Reportes
+
+' Relaciones de Médico
+Medico --> UC_Disponib
+Medico --> UC_VerHist
+Medico --> UC_Alergias
+Medico --> UC_Consulta
+Medico --> UC_Presc
+Medico --> UC_Enmienda
+
+' Inclusión obligatoria de Autenticación (RF-21 / RNF-01)
+UC_Users ..> UC_Auth : <<include>>
+UC_RegPac ..> UC_Auth : <<include>>
+UC_Agendar ..> UC_Auth : <<include>>
+UC_Consulta ..> UC_Auth : <<include>>
+UC_MovInv ..> UC_Auth : <<include>>
+
+' Extensión de Auditoría para operaciones críticas y clínicas (RF-20 / RN-11)
+UC_AuditLog ..> UC_RegPac : <<extend>>
+UC_AuditLog ..> UC_GestCita : <<extend>>
+UC_AuditLog ..> UC_Consulta : <<extend>>
+UC_AuditLog ..> UC_Presc : <<extend>>
+UC_AuditLog ..> UC_Enmienda : <<extend>>
+UC_AuditLog ..> UC_MovInv : <<extend>>
+UC_AuditLog ..> UC_Users : <<extend>>
+
+note bottom of Admin
+  <b>Restricción de Seguridad (Decisión 10 / RNF-02 / RNF-03):</b>
+  El <b>Administrador</b> NO tiene acceso al Módulo 4 (Historial Clínico y Consultas).
+  Sus permisos se limitan estrictamente a funciones administrativas, de personal,
+  inventario y auditoría de metadatos.
+end note
+
+@enduml

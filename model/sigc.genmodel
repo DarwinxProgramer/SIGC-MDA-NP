@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/SIGC-MDA/src" modelPluginID="SIGC-MDA" modelName="Sigc"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="5.0" copyrightFields="false" operationReflection="true" importOrganizing="true">
+  <foreignModel>sigc.ecore</foreignModel>
+  <genPackages prefix="Sigc" disposableProviderFactory="true" ecorePackage="sigc.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="sigc.ecore#//Sexo">
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//Sexo/MASCULINO"/>
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//Sexo/FEMENINO"/>
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//Sexo/OTRO"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="sigc.ecore#//EstadoCita">
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//EstadoCita/PENDIENTE"/>
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//EstadoCita/EN_PROCESO"/>
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//EstadoCita/FINALIZADA"/>
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//EstadoCita/CANCELADA"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="sigc.ecore#//TipoProducto">
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//TipoProducto/MEDICAMENTO"/>
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//TipoProducto/INSUMO"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="sigc.ecore#//TipoMovimiento">
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//TipoMovimiento/ENTRADA"/>
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//TipoMovimiento/SALIDA"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="sigc.ecore#//TipoOperacion">
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//TipoOperacion/CREAR"/>
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//TipoOperacion/ACTUALIZAR"/>
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//TipoOperacion/CANCELAR"/>
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//TipoOperacion/CONSULTAR"/>
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//TipoOperacion/ELIMINAR_LOGICO"/>
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//TipoOperacion/AUTENTICAR"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="sigc.ecore#//TipoAntecedente">
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//TipoAntecedente/FAMILIAR"/>
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//TipoAntecedente/PERSONAL"/>
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//TipoAntecedente/QUIRURGICO"/>
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//TipoAntecedente/OTRO"/>
+    </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="sigc.ecore#//DiaSemana">
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//DiaSemana/LUNES"/>
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//DiaSemana/MARTES"/>
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//DiaSemana/MIERCOLES"/>
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//DiaSemana/JUEVES"/>
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//DiaSemana/VIERNES"/>
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//DiaSemana/SABADO"/>
+      <genEnumLiterals ecoreEnumLiteral="sigc.ecore#//DiaSemana/DOMINGO"/>
+    </genEnums>
+    <genClasses ecoreClass="sigc.ecore#//Paciente">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Paciente/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Paciente/identificacion"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Paciente/nombres"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Paciente/apellidos"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Paciente/fechaNacimiento"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Paciente/sexo"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Paciente/telefono"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Paciente/email"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Paciente/direccion"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Paciente/activo"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference sigc.ecore#//Paciente/historial"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference sigc.ecore#//Paciente/citas"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference sigc.ecore#//Paciente/alergias"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference sigc.ecore#//Paciente/antecedentes"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference sigc.ecore#//Paciente/consultas"/>
+    </genClasses>
+    <genClasses ecoreClass="sigc.ecore#//HistorialClinico">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//HistorialClinico/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//HistorialClinico/fechaCreacion"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//HistorialClinico/observaciones"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//HistorialClinico/activo"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference sigc.ecore#//HistorialClinico/paciente"/>
+    </genClasses>
+    <genClasses ecoreClass="sigc.ecore#//Medico">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Medico/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Medico/cedula"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Medico/nombres"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Medico/apellidos"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Medico/telefono"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Medico/email"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Medico/registroProfesional"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Medico/activo"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference sigc.ecore#//Medico/especialidades"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference sigc.ecore#//Medico/horarios"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference sigc.ecore#//Medico/citas"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference sigc.ecore#//Medico/consultas"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference sigc.ecore#//Medico/prescripciones"/>
+    </genClasses>
+    <genClasses ecoreClass="sigc.ecore#//Especialidad">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Especialidad/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Especialidad/nombre"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Especialidad/descripcion"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Especialidad/activo"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference sigc.ecore#//Especialidad/medicos"/>
+    </genClasses>
+    <genClasses ecoreClass="sigc.ecore#//HorarioMedico">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//HorarioMedico/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//HorarioMedico/dia"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//HorarioMedico/horaInicio"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//HorarioMedico/horaFin"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//HorarioMedico/activo"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference sigc.ecore#//HorarioMedico/medico"/>
+    </genClasses>
+    <genClasses ecoreClass="sigc.ecore#//Cita">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Cita/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Cita/fechaHoraInicio"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Cita/fechaHoraFin"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Cita/motivo"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Cita/estado"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Cita/activo"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference sigc.ecore#//Cita/paciente"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference sigc.ecore#//Cita/medico"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference sigc.ecore#//Cita/especialidad"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference sigc.ecore#//Cita/consulta"/>
+    </genClasses>
+    <genClasses ecoreClass="sigc.ecore#//Consulta">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Consulta/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Consulta/fechaHora"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Consulta/motivo"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Consulta/evaluacion"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Consulta/activo"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference sigc.ecore#//Consulta/cita"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference sigc.ecore#//Consulta/paciente"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference sigc.ecore#//Consulta/medico"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference sigc.ecore#//Consulta/diagnosticos"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference sigc.ecore#//Consulta/tratamientos"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference sigc.ecore#//Consulta/prescripciones"/>
+    </genClasses>
+    <genClasses ecoreClass="sigc.ecore#//Diagnostico">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Diagnostico/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Diagnostico/descripcion"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Diagnostico/codigoCie10"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Diagnostico/activo"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference sigc.ecore#//Diagnostico/consulta"/>
+    </genClasses>
+    <genClasses ecoreClass="sigc.ecore#//Tratamiento">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Tratamiento/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Tratamiento/descripcion"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Tratamiento/indicaciones"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Tratamiento/activo"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference sigc.ecore#//Tratamiento/consulta"/>
+    </genClasses>
+    <genClasses ecoreClass="sigc.ecore#//Prescripcion">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Prescripcion/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Prescripcion/medicamento"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Prescripcion/dosis"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Prescripcion/frecuencia"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Prescripcion/duracion"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Prescripcion/activo"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference sigc.ecore#//Prescripcion/consulta"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference sigc.ecore#//Prescripcion/medico"/>
+    </genClasses>
+    <genClasses ecoreClass="sigc.ecore#//Alergia">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Alergia/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Alergia/descripcion"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Alergia/activo"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference sigc.ecore#//Alergia/paciente"/>
+    </genClasses>
+    <genClasses ecoreClass="sigc.ecore#//Antecedente">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Antecedente/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Antecedente/descripcion"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Antecedente/tipo"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Antecedente/activo"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference sigc.ecore#//Antecedente/paciente"/>
+    </genClasses>
+    <genClasses ecoreClass="sigc.ecore#//ProductoInventario">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//ProductoInventario/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//ProductoInventario/nombre"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//ProductoInventario/descripcion"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//ProductoInventario/tipo"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//ProductoInventario/stockActual"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//ProductoInventario/stockMinimo"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//ProductoInventario/fechaVencimiento"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//ProductoInventario/precio"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//ProductoInventario/activo"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference sigc.ecore#//ProductoInventario/movimientos"/>
+    </genClasses>
+    <genClasses ecoreClass="sigc.ecore#//MovimientoInventario">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//MovimientoInventario/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//MovimientoInventario/tipo"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//MovimientoInventario/cantidad"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//MovimientoInventario/fecha"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//MovimientoInventario/observacion"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//MovimientoInventario/activo"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference sigc.ecore#//MovimientoInventario/producto"/>
+    </genClasses>
+    <genClasses ecoreClass="sigc.ecore#//Usuario">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Usuario/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Usuario/username"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Usuario/password"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Usuario/email"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Usuario/nombreCompleto"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Usuario/activo"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference sigc.ecore#//Usuario/roles"/>
+    </genClasses>
+    <genClasses ecoreClass="sigc.ecore#//Rol">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Rol/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Rol/nombre"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Rol/descripcion"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Rol/activo"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference sigc.ecore#//Rol/usuarios"/>
+    </genClasses>
+    <genClasses ecoreClass="sigc.ecore#//Auditoria">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Auditoria/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Auditoria/usuarioId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Auditoria/username"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Auditoria/entidad"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Auditoria/entidadId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Auditoria/operacion"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Auditoria/fechaHora"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sigc.ecore#//Auditoria/activo"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

@@ -1,0 +1,68 @@
+@startuml
+title Diagrama de Máquina de Estados - Entidad Cita (Decisión 3 y RN-12)
+
+skinparam defaultFontName "Segoe UI", Arial, sans-serif
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam StateBackgroundColor #F8FAFC
+skinparam StateBorderColor #334155
+skinparam StateFontColor #0F172A
+skinparam ArrowColor #475569
+
+skinparam note {
+    BackgroundColor #FEF9C3
+    BorderColor #CA8A04
+    FontColor #713F12
+}
+
+' Estado inicial al agendar la cita (RF-05, Decisión 3)
+[*] --> PENDIENTE : Agendar cita\n[Validaciones RN-03, RN-04, RN-05, RN-06 OK]
+
+state PENDIENTE {
+    PENDIENTE : Cita programada y reservada en agenda.
+    PENDIENTE : Permite reprogramación validando margen de 30 min (RF-07, Decisión 2).
+}
+
+state EN_PROCESO {
+    EN_PROCESO : El médico inició la atención del paciente.
+    EN_PROCESO : Se habilita el registro de Consulta, Diagnóstico y Prescripción.
+}
+
+state FINALIZADA #DCFCE7 {
+    FINALIZADA : Consulta médica concluida y registrada en HistorialClinico.
+    FINALIZADA : Estado terminal exitoso.
+}
+
+state CANCELADA #FEE2E2 {
+    CANCELADA : Cita anulada por paciente, recepcionista o inasistencia (RF-07, RF-26).
+    CANCELADA : Libera el bloque horario del médico y del paciente.
+}
+
+' Transiciones válidas (Decisión 3)
+PENDIENTE --> PENDIENTE : Reprogramar horario\n(RF-07) [Sin solapamiento +30 min]
+PENDIENTE --> EN_PROCESO : Iniciar consulta médica\n(RF-10) [Médico responsable]
+PENDIENTE --> CANCELADA : Cancelar cita / Marcar inasistencia\n(RF-07, RF-26)
+EN_PROCESO --> FINALIZADA : Cerrar consulta médica\n[Consulta y auditoría registradas (RN-11)]
+
+' Estados finales
+FINALIZADA --> [*]
+CANCELADA --> [*]
+
+' ============================================================================
+' TRANSICIONES INVÁLIDAS (Documentadas para restricciones OCL en Fase 3):
+' 1. CANCELADA --> EN_PROCESO   (Prohibido por RN-12: cita cancelada no puede atenderse)
+' 2. CANCELADA --> FINALIZADA   (Prohibido por RN-12: cita cancelada no pasa a atendida)
+' 3. PENDIENTE --> FINALIZADA   (Prohibido: debe pasar por EN_PROCESO durante la consulta)
+' 4. FINALIZADA --> CANCELADA   (Prohibido: una atención clínica ya realizada es inmutable)
+' 5. FINALIZADA --> PENDIENTE   (Prohibido: estado terminal)
+' ============================================================================
+
+note right of CANCELADA
+  <b>Regla de Negocio RN-12:</b>
+  Una cita en estado <b>CANCELADA</b> no puede
+  transicionar a <b>EN_PROCESO</b> ni a <b>FINALIZADA</b>.
+  Si el paciente requiere atención, debe registrarse
+  una nueva cita o un procedimiento auditado de reactivación.
+end note
+
+@enduml

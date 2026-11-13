@@ -1,0 +1,52 @@
+@startuml
+title P-02: Proceso de Agendamiento de Cita Médica
+
+skinparam defaultFontName "Segoe UI", Arial, sans-serif
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam ActivityBackgroundColor #FFFFFF
+skinparam ActivityBorderColor #334155
+skinparam ActivityDiamondBackgroundColor #FEF9C3
+skinparam ActivityDiamondBorderColor #CA8A04
+skinparam ArrowColor #475569
+skinparam SwimlaneTitleBackgroundColor #F1F5F9
+skinparam SwimlaneBorderColor #94A3B8
+
+|Recepcionista|
+start
+:Seleccionar paciente activo\n(RF-02, Decisión 9);
+:Seleccionar especialidad médica requerida,\nmédico y rango horario (fechaHoraInicio, fechaHoraFin);
+
+|Sistema|
+:Verificar que el médico y el paciente\nestén activos (activo = true);
+:Validar que el médico tenga asignada\nla especialidad solicitada (RN-06);
+
+if (¿Médico autorizado en la especialidad?) then (No)
+    :Rechazar solicitud y notificar\nincompatibilidad de especialidad (RN-06);
+    stop
+else (Sí)
+    :Verificar horario de atención del médico\nen el día solicitado (RF-04, RF-06);
+    :Evaluar solapamiento de citas del médico\nincluyendo margen obligatorio de 30 minutos\nentre citas confirmadas/pendientes (RN-04, Decisión 2);
+
+    if (¿Existe conflicto en agenda del médico (+30 min)?) then (Sí)
+        :Notificar indisponibilidad del médico\nen esa franja horaria;
+        stop
+    else (No)
+        :Evaluar solapamiento de citas activas\npara el mismo paciente (RN-05);
+
+        if (¿Paciente tiene otra cita superpuesta?) then (Sí)
+            :Notificar conflicto de horario\ndel paciente (RN-05);
+            stop
+        else (No)
+            ' Decisión 3: Estado inicial de toda cita nueva es PENDIENTE
+            :Crear registro de **Cita** asociada a\nPaciente, Médico y Especialidad (RN-03)\ncon estado = **PENDIENTE** (Decisión 3);
+            :Registrar operación en **Auditoria**\n(RF-20, Decisión 8);
+
+            |Recepcionista|
+            :Confirmar agendamiento y entregar\ncomprobante de cita al paciente;
+            stop
+        endif
+    endif
+endif
+
+@enduml

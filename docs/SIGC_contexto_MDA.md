@@ -213,3 +213,55 @@ Desarrollar un sistema integral de gestión clínica que permita administrar de 
 | 10 | **El Administrador no tiene acceso clínico por defecto.** | Restricción OCL sobre permisos por rol; el rol ADMIN solo accede a funciones administrativas. |
 
 ### Estados de Cita y transiciones válidas
+
+| Estado Origen | Estado Destino | Condición / Regla |
+|---|---|---|
+| `[*]` (Creación) | `PENDIENTE` | Estado inicial al agendar una cita (`RF-05`, Decisión 3). |
+| `PENDIENTE` | `PENDIENTE` | Reprogramación de horario validando margen de 30 minutos (`RF-07`, Decisión 2). |
+| `PENDIENTE` | `EN_PROCESO` | El médico inicia la consulta médica (`RF-10`). |
+| `PENDIENTE` | `CANCELADA` | Cancelación administrativa o por no asistencia (`RF-07`, `RF-26`). |
+| `EN_PROCESO` | `FINALIZADA` | Cierre de la consulta médica tras registrar evolución y auditoría (`RN-11`). |
+| `CANCELADA` | `EN_PROCESO` / `FINALIZADA` | **Transición prohibida (`RN-12`)**: requiere reactivación formal auditada o nueva cita. |
+
+---
+
+## 11. Procesos principales del negocio (CIM)
+
+- **P-01. Registro de paciente:** Búsqueda previa por identificación (`RN-01`), validación de duplicados, alta de `Paciente`, creación automática `1:1` de `HistorialClinico` (`RN-02`) y registro en `Auditoria`.
+- **P-02. Agendamiento de cita:** Selección de paciente, especialidad y médico; validación de especialidad autorizada (`RN-06`) y no solapamiento con margen de 30 minutos (`RN-04`, `RN-05`, Decisión 2); creación en estado `PENDIENTE`.
+- **P-03. Atención de consulta médica:** Transición `PENDIENTE` → `EN_PROCESO`, registro de `Consulta`, `Diagnostico`, `Tratamiento`, `Prescripcion`, alergias/antecedentes sin sobrescritura (`RF-23`), auditoría (`RN-11`) y cierre en `FINALIZADA`.
+- **P-04. Movimiento de inventario:** Registro de entradas y salidas sobre `ProductoInventario` validando existencias suficientes en salidas (`RN-10`) y alertas de stock mínimo (`RF-17`).
+- **P-05. Autenticación y control de acceso:** Validación de credenciales y estado activo, carga de múltiples roles (`Usuario * — * Rol`, Decisión 4), restricción de acceso clínico al rol `ADMIN` (Decisión 10) y registro en `Auditoria`.
+
+---
+
+## 12. Entidades del dominio (PIM / Ecore)
+
+### Clases principales (`EClass`)
+1. `Paciente`
+2. `HistorialClinico`
+3. `Medico`
+4. `Especialidad`
+5. `HorarioMedico`
+6. `Cita`
+7. `Consulta`
+8. `Diagnostico`
+9. `Tratamiento`
+10. `Prescripcion`
+11. `Alergia`
+12. `Antecedente`
+13. `ProductoInventario`
+14. `MovimientoInventario`
+15. `Usuario`
+16. `Rol`
+17. `Auditoria`
+
+### Enumeraciones (`EEnum`)
+1. `Sexo` (`MASCULINO`, `FEMENINO`, `OTRO`)
+2. `EstadoCita` (`PENDIENTE`, `EN_PROCESO`, `FINALIZADA`, `CANCELADA`)
+3. `TipoProducto` (`MEDICAMENTO`, `INSUMO`)
+4. `TipoMovimiento` (`ENTRADA`, `SALIDA`)
+5. `TipoOperacion` (`CREAR`, `ACTUALIZAR`, `CANCELAR`, `CONSULTAR`, `ELIMINAR_LOGICO`, `AUTENTICAR`)
+6. `TipoAntecedente` (`FAMILIAR`, `PERSONAL`, `QUIRURGICO`, `OTRO`)
+7. `DiaSemana` (`LUNES`, `MARTES`, `MIERCOLES`, `JUEVES`, `VIERNES`, `SABADO`, `DOMINGO`)
+

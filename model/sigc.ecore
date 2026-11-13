@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="sigc" nsURI="http://sigc/ecore" nsPrefix="sigc">
+  <eClassifiers xsi:type="ecore:EEnum" name="Sexo">
+    <eLiterals name="MASCULINO"/>
+    <eLiterals name="FEMENINO" value="1"/>
+    <eLiterals name="OTRO" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="EstadoCita">
+    <eLiterals name="PENDIENTE"/>
+    <eLiterals name="EN_PROCESO" value="1"/>
+    <eLiterals name="FINALIZADA" value="2"/>
+    <eLiterals name="CANCELADA" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TipoProducto">
+    <eLiterals name="MEDICAMENTO"/>
+    <eLiterals name="INSUMO" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TipoMovimiento">
+    <eLiterals name="ENTRADA"/>
+    <eLiterals name="SALIDA" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TipoOperacion">
+    <eLiterals name="CREAR"/>
+    <eLiterals name="ACTUALIZAR" value="1"/>
+    <eLiterals name="CANCELAR" value="2"/>
+    <eLiterals name="CONSULTAR" value="3"/>
+    <eLiterals name="ELIMINAR_LOGICO" value="4"/>
+    <eLiterals name="AUTENTICAR" value="5"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TipoAntecedente">
+    <eLiterals name="FAMILIAR"/>
+    <eLiterals name="PERSONAL" value="1"/>
+    <eLiterals name="QUIRURGICO" value="2"/>
+    <eLiterals name="OTRO" value="3"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DiaSemana">
+    <eLiterals name="LUNES"/>
+    <eLiterals name="MARTES" value="1"/>
+    <eLiterals name="MIERCOLES" value="2"/>
+    <eLiterals name="JUEVES" value="3"/>
+    <eLiterals name="VIERNES" value="4"/>
+    <eLiterals name="SABADO" value="5"/>
+    <eLiterals name="DOMINGO" value="6"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Paciente">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="identificacion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nombres" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="apellidos" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fechaNacimiento" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sexo" eType="#//Sexo"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="telefono" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="email" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="direccion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="historial" eType="#//HistorialClinico"
+        containment="true" eOpposite="#//HistorialClinico/paciente"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="citas" upperBound="-1"
+        eType="#//Cita" eOpposite="#//Cita/paciente"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="alergias" upperBound="-1"
+        eType="#//Alergia" containment="true" eOpposite="#//Alergia/paciente"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="antecedentes" upperBound="-1"
+        eType="#//Antecedente" containment="true" eOpposite="#//Antecedente/paciente"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="consultas" upperBound="-1"
+        eType="#//Consulta" eOpposite="#//Consulta/paciente"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HistorialClinico">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fechaCreacion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="observaciones" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paciente" eType="#//Paciente"
+        eOpposite="#//Paciente/historial"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Medico">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cedula" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nombres" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="apellidos" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="telefono" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="email" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="registroProfesional" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="especialidades" upperBound="-1"
+        eType="#//Especialidad" eOpposite="#//Especialidad/medicos"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="horarios" upperBound="-1"
+        eType="#//HorarioMedico" containment="true" eOpposite="#//HorarioMedico/medico"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="citas" upperBound="-1"
+        eType="#//Cita" eOpposite="#//Cita/medico"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="consultas" upperBound="-1"
+        eType="#//Consulta" eOpposite="#//Consulta/medico"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prescripciones" upperBound="-1"
+        eType="#//Prescripcion" eOpposite="#//Prescripcion/medico"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Especialidad">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nombre" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="descripcion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="medicos" upperBound="-1"
+        eType="#//Medico" eOpposite="#//Medico/especialidades"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="HorarioMedico">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dia" eType="#//DiaSemana"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="horaInicio" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="horaFin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="medico" eType="#//Medico"
+        eOpposite="#//Medico/horarios"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Cita">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fechaHoraInicio" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fechaHoraFin" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="motivo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="estado" eType="#//EstadoCita"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paciente" eType="#//Paciente"
+        eOpposite="#//Paciente/citas"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="medico" eType="#//Medico"
+        eOpposite="#//Medico/citas"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="especialidad" eType="#//Especialidad"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="consulta" eType="#//Consulta"
+        eOpposite="#//Consulta/cita"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Consulta">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fechaHora" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="motivo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="evaluacion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="cita" eType="#//Cita" eOpposite="#//Cita/consulta"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paciente" eType="#//Paciente"
+        eOpposite="#//Paciente/consultas"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="medico" eType="#//Medico"
+        eOpposite="#//Medico/consultas"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="diagnosticos" upperBound="-1"
+        eType="#//Diagnostico" containment="true" eOpposite="#//Diagnostico/consulta"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="tratamientos" upperBound="-1"
+        eType="#//Tratamiento" containment="true" eOpposite="#//Tratamiento/consulta"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prescripciones" upperBound="-1"
+        eType="#//Prescripcion" containment="true" eOpposite="#//Prescripcion/consulta"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Diagnostico">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="descripcion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="codigoCie10" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="consulta" eType="#//Consulta"
+        eOpposite="#//Consulta/diagnosticos"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Tratamiento">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="descripcion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="indicaciones" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="consulta" eType="#//Consulta"
+        eOpposite="#//Consulta/tratamientos"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Prescripcion">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="medicamento" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dosis" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="frecuencia" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="duracion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="consulta" eType="#//Consulta"
+        eOpposite="#//Consulta/prescripciones"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="medico" eType="#//Medico"
+        eOpposite="#//Medico/prescripciones"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Alergia">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="descripcion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paciente" eType="#//Paciente"
+        eOpposite="#//Paciente/alergias"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Antecedente">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="descripcion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tipo" eType="#//TipoAntecedente"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paciente" eType="#//Paciente"
+        eOpposite="#//Paciente/antecedentes"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ProductoInventario">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nombre" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="descripcion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tipo" eType="#//TipoProducto"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stockActual" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="stockMinimo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fechaVencimiento" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="precio" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="movimientos" upperBound="-1"
+        eType="#//MovimientoInventario" containment="true" eOpposite="#//MovimientoInventario/producto"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MovimientoInventario">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="tipo" eType="#//TipoMovimiento"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cantidad" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fecha" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="observacion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="producto" eType="#//ProductoInventario"
+        eOpposite="#//ProductoInventario/movimientos"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Usuario">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="username" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="password" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="email" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nombreCompleto" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="roles" upperBound="-1"
+        eType="#//Rol" eOpposite="#//Rol/usuarios"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Rol">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nombre" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="descripcion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="usuarios" upperBound="-1"
+        eType="#//Usuario" eOpposite="#//Usuario/roles"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Auditoria">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="usuarioId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="username" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="entidad" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="entidadId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="operacion" eType="#//TipoOperacion"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fechaHora" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="activo" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
+        defaultValueLiteral="true"/>
+  </eClassifiers>
+</ecore:EPackage>

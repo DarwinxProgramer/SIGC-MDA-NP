@@ -1,0 +1,41 @@
+module pim2psm;
+create OUT : psm from IN : sigc;
+
+rule EPackage2Database {
+    from s : sigc!EPackage
+    to t : psm!Database (
+        name <- s.name,
+        tables <- s.eClassifiers->select(e | e.oclIsKindOf(sigc!EClass))
+    )
+}
+
+rule EClass2Table {
+    from s : sigc!EClass
+    to t : psm!Table (
+        name <- s.name.toLower(),
+        columns <- s.eStructuralFeatures->select(e | e.oclIsKindOf(sigc!EAttribute)),
+        foreignKeys <- s.eStructuralFeatures->select(e | e.oclIsKindOf(sigc!EReference) and not e.containment)
+    )
+}
+
+rule EAttribute2Column {
+    from s : sigc!EAttribute
+    to t : psm!Column (
+        name <- s.name,
+        type <- if s.eType.name = 'EString' then 'VARCHAR' 
+                else if s.eType.name = 'EInt' then 'INTEGER'
+                else if s.eType.name = 'EDate' then 'TIMESTAMP'
+                else if s.eType.name = 'EBoolean' then 'BOOLEAN'
+                else 'VARCHAR' endif endif endif endif,
+        isPrimaryKey <- if s.iD then true else false endif
+    )
+}
+
+rule EReference2ForeignKey {
+    from s : sigc!EReference (not s.containment)
+    to t : psm!ForeignKey (
+        name <- s.name + '_id',
+        targetTable <- s.eType.name.toLower(),
+        targetColumn <- 'id'
+    )
+}

@@ -1,0 +1,47 @@
+@startuml
+title P-01: Proceso de Registro de Paciente e Inicialización de Historial Clínico
+
+skinparam defaultFontName "Segoe UI", Arial, sans-serif
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam ActivityBackgroundColor #FFFFFF
+skinparam ActivityBorderColor #334155
+skinparam ActivityDiamondBackgroundColor #FEF9C3
+skinparam ActivityDiamondBorderColor #CA8A04
+skinparam ArrowColor #475569
+skinparam SwimlaneTitleBackgroundColor #F1F5F9
+skinparam SwimlaneBorderColor #94A3B8
+
+|Recepcionista|
+start
+:Solicitar documento de identificación\ny datos personales al paciente;
+:Ingresar identificación o código\nen el buscador de pacientes;
+
+|Sistema|
+:Buscar paciente por identificación\núnica (RF-01, RN-01);
+
+if (¿Paciente ya existe en el sistema?) then (Sí [Duplicado])
+    |Recepcionista|
+    :Visualizar alerta de paciente existente;
+    :Consultar ficha actual del paciente\n(RF-02);
+    stop
+else (No [Nuevo registro])
+    |Recepcionista|
+    :Completar formulario de datos personales,\ncontacto y estado activo = true (Decisión 9);
+    :Confirmar solicitud de registro;
+
+    |Sistema|
+    :Validar formato y obligatoriedad\nde campos e identificador único (RN-01);
+    :Persistir entidad **Paciente**\ncon activo = true (RF-01);
+
+    ' Decisión 1 y RN-02: Relación 1 a 1 estricta por composición
+    :Crear automáticamente entidad **HistorialClinico**\nasociada 1:1 al Paciente (RN-02, Decisión 1);
+
+    :Registrar evento de creación en **Auditoria**\n(usuario, fechaHora, operación=CREAR,\nentidad=Paciente/HistorialClinico) (RF-20, Decisión 8);
+
+    |Recepcionista|
+    :Recibir confirmación de paciente registrado\ne historial clínico inicializado;
+    stop
+endif
+
+@enduml

@@ -1,0 +1,54 @@
+@startuml
+title P-04: Proceso de Gestión de Inventario y Movimientos de Stock
+
+skinparam defaultFontName "Segoe UI", Arial, sans-serif
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam ActivityBackgroundColor #FFFFFF
+skinparam ActivityBorderColor #334155
+skinparam ActivityDiamondBackgroundColor #FEF9C3
+skinparam ActivityDiamondBorderColor #CA8A04
+skinparam ArrowColor #475569
+skinparam SwimlaneTitleBackgroundColor #F1F5F9
+skinparam SwimlaneBorderColor #94A3B8
+
+|Administrador|
+start
+:Seleccionar **ProductoInventario** activo\n(tipo: MEDICAMENTO o INSUMO) (RF-15, Decisión 7);
+:Indicar tipo de movimiento (**ENTRADA** o **SALIDA**),\ncantidad, motivo y fecha de vencimiento (si aplica);
+
+|Sistema|
+:Consultar stock actual y estado activo\ndel ProductoInventario (RF-16);
+
+if (¿Tipo de movimiento?) then (ENTRADA)
+    :Incrementar existencias:\nstockActual = stockActual + cantidad;
+    :Actualizar fecha de vencimiento del lote\nsi corresponde (RF-15);
+else (SALIDA)
+    ' RN-10: Prohibido registrar salidas superiores al stock disponible
+    :Verificar disponibilidad de existencias\n(cantidad <= stockActual) (RN-10);
+
+    if (¿Stock suficiente (cantidad <= stockActual)?) then (No)
+        :Rechazar movimiento de salida\npor existencias insuficientes (RN-10);
+        |Administrador|
+        :Visualizar mensaje de error de stock;
+        stop
+    else (Sí)
+        |Sistema|
+        :Descontar existencias:\nstockActual = stockActual - cantidad;
+    endif
+endif
+
+|Sistema|
+:Persistir entidad **MovimientoInventario**\ny actualizar **ProductoInventario** (RF-16);
+:Registrar operación en **Auditoria**\n(usuario, fechaHora, operación, idProducto) (RF-20, Decisión 8);
+
+if (¿stockActual <= stockMinimo o próximo a vencer?) then (Sí)
+    :Generar alerta de stock bajo / vencimiento\n(RF-17);
+else (No)
+endif
+
+|Administrador|
+:Visualizar resumen del movimiento\ny stock actualizado;
+stop
+
+@enduml

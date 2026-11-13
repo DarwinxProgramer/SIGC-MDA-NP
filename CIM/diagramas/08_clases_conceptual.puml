@@ -1,0 +1,155 @@
+@startuml
+title Modelo Conceptual de Dominio (CIM) - Sistema Integral de Gestión Clínica (SIGC)
+
+skinparam defaultFontName "Segoe UI", Arial, sans-serif
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam roundcorner 6
+skinparam packageStyle rectangle
+hide empty members
+hide circle
+
+skinparam class {
+    BackgroundColor #FFFFFF
+    BorderColor #334155
+    HeaderBackgroundColor #F1F5F9
+    FontColor #0F172A
+    ArrowColor #475569
+}
+
+skinparam class<<highlight>> {
+    BackgroundColor #EFF6FF
+    BorderColor #2563EB
+    HeaderBackgroundColor #DBEAFE
+}
+
+skinparam class<<enumeration>> {
+    BackgroundColor #FEFCE8
+    BorderColor #CA8A04
+    HeaderBackgroundColor #FEF08A
+}
+
+skinparam note {
+    BackgroundColor #FEF9C3
+    BorderColor #CA8A04
+    FontColor #713F12
+}
+
+' ============================================================================
+' 16 ENTIDADES PRINCIPALES DEL DOMINIO SIGC (Sin atributos detallados - CIM)
+' ============================================================================
+
+package "Seguridad y Auditoría" {
+    class Usuario <<highlight>>
+    class Rol <<highlight>>
+    class Permiso
+    class Auditoria
+}
+
+package "Personal Médico y Agenda" {
+    class Medico
+    class Especialidad
+    class HorarioAtencion
+    class Cita
+}
+
+package "Pacientes e Historial Clínico" {
+    class Paciente <<highlight>>
+    class HistorialClinico <<highlight>>
+    class Alergia
+    class AntecedenteMedico
+    class Consulta
+    class Diagnostico
+    class Tratamiento
+    class Prescripcion
+}
+
+package "Inventario" {
+    class ProductoInventario <<highlight>>
+    class MovimientoInventario
+}
+
+package "Enumeraciones del Dominio" {
+    enum EstadoCita <<enumeration>> {
+        PENDIENTE
+        EN_PROCESO
+        FINALIZADA
+        CANCELADA
+    }
+
+    enum TipoProducto <<enumeration>> {
+        MEDICAMENTO
+        INSUMO
+    }
+
+    enum TipoMovimiento <<enumeration>> {
+        ENTRADA
+        SALIDA
+    }
+
+    enum TipoRol <<enumeration>> {
+        ADMIN
+        RECEPCIONISTA
+        MEDICO
+    }
+}
+
+' ============================================================================
+' RELACIONES PRINCIPALES Y MULTIPLICIDADES
+' ============================================================================
+
+' Seguridad y Auditoría (Decisión 4 y Decisión 8)
+Usuario "*" -- "*" Rol : tiene asignados >
+Rol "*" -- "*" Permiso : concede >
+Usuario "1" -- "0..*" Auditoria : genera >
+Usuario "0..1" -- "0..1" Medico : cuenta de acceso >
+
+' Personal Médico y Horarios (RF-03, RF-04)
+Medico "1..*" -- "1..*" Especialidad : atiende >
+Medico "1" *-- "1..*" HorarioAtencion : define disponibilidad >
+
+' Citas Médicas (RN-03, RN-06, Decisión 2, Decisión 3)
+Paciente "1" -- "0..*" Cita : solicita >
+Medico "1" -- "0..*" Cita : atiende >
+Especialidad "1" -- "0..*" Cita : corresponde a >
+Cita "*" ..> "1" EstadoCita : estado
+
+' Historial Clínico y Atención (RN-02, RN-07, RN-08, RN-09, Decisiones 1, 5, 6)
+Paciente "1" *-- "1" HistorialClinico : posee (RN-02) >
+HistorialClinico "1" *-- "0..*" Alergia : registra (texto libre) >
+HistorialClinico "1" *-- "0..*" AntecedenteMedico : documenta >
+HistorialClinico "1" *-- "0..*" Consulta : contiene entradas >
+
+Cita "0..1" -- "0..1" Consulta : origina >
+Medico "1" -- "0..*" Consulta : es responsable (RN-07) >
+Consulta "1" *-- "1..*" Diagnostico : determina (RN-08) >
+Consulta "1" *-- "0..*" Tratamiento : indica >
+Consulta "1" *-- "0..*" Prescripcion : emite (RN-09) >
+Medico "1" -- "0..*" Prescripcion : autoriza (RN-09) >
+
+' Inventario (RN-10, Decisión 7)
+ProductoInventario "1" *-- "0..*" MovimientoInventario : registra movimientos >
+ProductoInventario "*" ..> "1" TipoProducto : clasificado como
+MovimientoInventario "*" ..> "1" TipoMovimiento : tipo
+
+' Notas de Decisiones Arquitectónicas Clave
+note top of HistorialClinico
+  <b>Decisión 1 y RN-02:</b>
+  Relación de composición estricta <b>1 a 1</b>
+  entre <b>Paciente</b> e <b>HistorialClinico</b>.
+  Las entradas clínicas no se sobrescriben (RF-23).
+end note
+
+note top of Usuario
+  <b>Decisión 4 y Decisión 10:</b>
+  Un <b>Usuario</b> puede tener múltiples <b>Roles</b> (* — *).
+  El rol <b>ADMIN</b> no accede a entidades clínicas.
+end note
+
+note bottom of ProductoInventario
+  <b>Decisión 5 y Decisión 7:</b>
+  • <b>Medicamento</b> e insumo se unifican en <b>ProductoInventario</b>.
+  • <b>Prescripcion</b> es un registro clínico plano (sin líneas de detalle).
+end note
+
+@enduml

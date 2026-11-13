@@ -1,0 +1,47 @@
+@startuml
+title P-05: Proceso de Autenticación, Autorización Multirrol y Auditoría de Acceso
+
+skinparam defaultFontName "Segoe UI", Arial, sans-serif
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam ActivityBackgroundColor #FFFFFF
+skinparam ActivityBorderColor #334155
+skinparam ActivityDiamondBackgroundColor #FEF9C3
+skinparam ActivityDiamondBorderColor #CA8A04
+skinparam ArrowColor #475569
+skinparam SwimlaneTitleBackgroundColor #F1F5F9
+skinparam SwimlaneBorderColor #94A3B8
+
+|Usuario Interno|
+start
+:Ingresar nombre de usuario y contraseña\nen pantalla de inicio de sesión (RF-21);
+
+|Sistema|
+:Buscar cuenta de **Usuario** y verificar\ncredenciales e indicador **activo = true** (RNF-01, Decisión 9);
+
+if (¿Credenciales válidas y usuario activo?) then (No)
+    :Registrar intento fallido de autenticación\nen **Auditoria** (RF-20, RNF-08);
+    |Usuario Interno|
+    :Mostrar mensaje de acceso denegado;
+    stop
+else (Sí)
+    |Sistema|
+    ' Decisión 4: Un usuario puede tener varios roles (relación N:M)
+    :Recuperar colección de **Roles** activos\nasociados al Usuario (RF-19, Decisión 4);
+    :Consolidar permisos efectivos según roles\n(ADMIN, RECEPCIONISTA, MEDICO) (RNF-02);
+
+    if (¿Usuario tiene únicamente rol ADMIN?) then (Sí)
+        ' Decisión 10: El Administrador no tiene acceso clínico por defecto
+        :Restringir acceso a módulos clínicos\n(HistorialClinico, Consultas, Diagnósticos) (Decisión 10, RNF-03);
+    else (No)
+        :Habilitar módulos autorizados según\nla unión de sus roles asignados;
+    endif
+
+    :Registrar inicio de sesión exitoso en **Auditoria**\n(usuario, fechaHora, operación=LOGIN, entidad=Usuario) (RF-20, Decisión 8);
+
+    |Usuario Interno|
+    :Acceder al panel principal del SIGC\ncon menú adaptado a sus roles;
+    stop
+endif
+
+@enduml

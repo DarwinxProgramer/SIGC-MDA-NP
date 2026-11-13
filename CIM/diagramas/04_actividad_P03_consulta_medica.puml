@@ -1,0 +1,69 @@
+@startuml
+title P-03: Proceso de Atención de Consulta Médica y Actualización de Historial
+
+skinparam defaultFontName "Segoe UI", Arial, sans-serif
+skinparam defaultFontSize 11
+skinparam shadowing false
+skinparam ActivityBackgroundColor #FFFFFF
+skinparam ActivityBorderColor #334155
+skinparam ActivityDiamondBackgroundColor #FEF9C3
+skinparam ActivityDiamondBorderColor #CA8A04
+skinparam ArrowColor #475569
+skinparam SwimlaneTitleBackgroundColor #F1F5F9
+skinparam SwimlaneBorderColor #94A3B8
+
+|Médico|
+start
+:Seleccionar cita programada\nde su agenda del día (RF-27);
+
+|Sistema|
+:Validar que el estado de la cita\nsea **PENDIENTE** (RN-12, Decisión 3);
+
+if (¿Cita en estado PENDIENTE?) then (No [Cancelada / Otra])
+    :Bloquear inicio de atención\npor estado inválido (RN-12);
+    stop
+else (Sí)
+    :Cambiar estado de Cita:\n**PENDIENTE -> EN_PROCESO** (Decisión 3);
+    :Registrar cambio de estado en **Auditoria** (RF-20);
+    :Cargar **HistorialClinico** único del paciente,\nalergias y antecedentes previos (RF-08, RF-14);
+
+    |Médico|
+    :Revisar antecedentes y consultar al paciente;
+
+    if (¿Registrar nuevas alergias o antecedentes?) then (Sí)
+        :Ingresar descripción de alergia (texto libre)\no antecedente médico (RF-09, Decisión 6);
+        |Sistema|
+        :Guardar **Alergia** / **Antecedente** en HistorialClinico\nsin sobrescribir registros previos (RF-23);
+        :Auditar modificación de historial (RN-11);
+    else (No)
+    endif
+
+    |Médico|
+    :Registrar datos de la **Consulta** médica\n(motivo, signos vitales, evolución) (RF-10);
+    :Registrar **Diagnostico** asociado a la consulta\n(RF-11, RN-08);
+
+    |Sistema|
+    :Asociar Consulta al Paciente, Médico responsable\ne HistorialClinico (RN-07);
+    :Persistir Consulta y Diagnóstico;
+    :Registrar traza en **Auditoria** (RN-11, Decisión 8);
+
+    |Médico|
+    if (¿Requiere tratamiento o prescripción?) then (Sí)
+        :Documentar **Tratamiento** e indicaciones (RF-12);
+        :Emitir **Prescripcion** médica como registro plano\n(RF-13, RN-09, Decisión 5);
+        |Sistema|
+        :Validar médico autorizado (RN-09)\ny guardar Tratamiento y Prescripción;
+        :Registrar traza en **Auditoria** (RN-11);
+    else (No)
+    endif
+
+    |Médico|
+    :Finalizar atención médica;
+
+    |Sistema|
+    :Cambiar estado de Cita:\n**EN_PROCESO -> FINALIZADA** (Decisión 3);
+    :Registrar cierre de cita en **Auditoria** (RF-20);
+    stop
+endif
+
+@enduml
