@@ -1,0 +1,14 @@
+generated/*
+!generated/.gitkeep
+app/target/
+*.class
+*.log
+.DS_Store
+node_modules/
+.idea/
+*.iml
+.settings/
+bin/
+target/
+*.pyc
+.env
